@@ -1,17 +1,21 @@
+# Use the official Python image as the base image
 FROM python:3.8
-WORKDIR /app
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+# Set environment variable for unbuffered Python output
+ENV PYTHONBUFFFERED=1
 
-# install system dependencies
-RUN apt-get update
+# Set the working directory in the container
+WORKDIR /django
 
-# install dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt /app/
+# Copy the requirements file into the container
+COPY requirements.txt requirements.txt
+
+# Install project dependencies
 RUN pip install -r requirements.txt
 
-COPY . /app
+# Copy the Django project code into the container
+COPY . .
 
-ENTRYPOINT [ "gunicorn", "core.wsgi"]
+
+# Start the Django application
+CMD python manage.py runserver 0.0.0.0:8000
